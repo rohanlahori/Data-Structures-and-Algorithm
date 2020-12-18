@@ -42,9 +42,9 @@ int main()
         ll aa[n];
         vector<ll> v;
         map<ll,ll> m;
-        f(j,0,n)
+        f(i,0,n)
         {
-            cin>>aa[j];
+            cin>>aa[i];
         }
     }
    return 0;
