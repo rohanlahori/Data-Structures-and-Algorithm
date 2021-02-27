@@ -1,7 +1,6 @@
 #include <iostream>
 #include <bits/stdc++.h> 
 using namespace std;
-
 #define ll long long 
 #define all(x) (x).begin(),(x).end()
 #define vll vector<ll>
@@ -73,24 +72,27 @@ void delet(node* &head , int val)
 {
     
     node* temp=head;
-    cout<<temp->data<<" ";
+    //cout<<temp->data<<" ";
     if(head==NULL)
     {
         cout<<"Value not found\n";
     }
     else if(temp->data>val)
     {
+       // cout<<temp->data<<" ";
         delet(temp->left,val);
     }
     else if(temp->data<val)
     {
+        //cout<<temp->data<<" ";
         delet(temp->right,val);
     }
     else
     {
+
         if(head->left==NULL && head->right==NULL)
         {
-            temp=NULL;
+            head=NULL;
         }
         else if(head->left!=NULL)
         {
@@ -105,6 +107,128 @@ void delet(node* &head , int val)
     }
     
 }
+void inorder(node* temp){
+    if(temp==NULL)
+    {
+        return;
+    }
+    inorder(temp->left);
+    cout<<temp->data<<" ";
+    inorder(temp->right);
+}
+void preorder(node* temp){
+    if(temp==NULL)
+    {
+        return;
+    }
+    cout<<temp->data<<" ";
+    preorder(temp->left);
+    preorder(temp->right);
+}
+void postorder(node* temp){
+    if(temp==NULL)
+    {
+        return;
+    }
+    postorder(temp->left);
+    postorder(temp->right);
+    cout<<temp->data<<" ";
+}
+int totalNodes(node* &head){
+    if(head==NULL){
+        return 0;
+    }
+    else
+    {
+        return totalNodes(head->left)+totalNodes(head->right)+1;
+    }
+}
+int totalInternalNodes(node* &head){
+    if(head==NULL){
+        return 0;
+    }
+    else if(head->left==NULL && head->right==NULL)
+    {
+        return 0;
+    }
+    else
+    {
+        return totalInternalNodes(head->left)+totalInternalNodes(head->right)+1;
+    }
+}
+int totalExternalNodes(node* &head){
+    if(head==NULL){
+        return 0;
+    }
+    else if(head->left==NULL && head->right==NULL)
+    {
+        return 1;
+    }
+    else
+    {
+        return totalExternalNodes(head->left)+totalExternalNodes(head->right);
+    }
+}
+int Height(node* &head){
+    if(head==NULL){
+        return 0;
+    }
+    else
+    {
+        int LeftHeight=Height(head->left);
+        int RightHeight=Height(head->right);
+        if(LeftHeight>RightHeight)
+        {
+            return LeftHeight+1;
+        }
+        else
+        {
+            return RightHeight+1;
+        }
+    }
+}
+void MirrorImage(node* &head){
+    if(head!=NULL)
+    {
+        MirrorImage(head->left);
+        MirrorImage(head->right);
+        node* temp;
+        temp=head->left;
+        head->left=head->right;
+        head->right=temp;
+    }
+}
+int smallestelement(node* &head){
+    if(head==NULL || head->left==NULL)
+    {
+        return head->data;
+    }
+    else
+    {
+        return smallestelement(head->left);
+    }
+    
+}
+int largestelement(node* &head){
+    if(head==NULL || head->right==NULL)
+    {
+        return head->data;
+    }
+    else
+    {
+        return largestelement(head->right);
+    }
+    
+}
+void deletetree(node* head)
+{
+    if(head!=NULL)
+    {
+        deletetree(head->left);
+        deletetree(head->right);
+        delete head;
+    }
+}
 int main()
 {
 //   freopen('input.txt', 'r', stdin);
@@ -117,9 +241,29 @@ int main()
     insert(head,16);
     insert(head,5);
     //search(head,5);
+    inorder(head);
+    cout<<"\n";
+    postorder(head);
+    cout<<"\n";
+    preorder(head);
+    cout<<"\n";
     delet(head,5);
-    search(head,5);
-     
+    //search(head,5);
+    cout<<"\n";
+     inorder(head);
+    cout<<"\n";
+    cout<<"total numbers of nodes in Tree "<<totalNodes(head)<<"\n";
+    cout<<"total numbers of Internal nodes in Tree "<<totalInternalNodes(head)<<"\n";
+    cout<<"total numbers of External nodes in Tree "<<totalExternalNodes(head)<<"\n";
+    cout<<"Height in Tree "<<Height(head)<<"\n";
+    cout<<"Smallest element in tree is "<<smallestelement(head)<<"\n";
+    cout<<"Largest element in tree is "<<largestelement(head)<<"\n";
+    cout<<"After miroor image of the tree\n";
+    MirrorImage(head);
+    inorder(head);
+    deletetree(head);
+    cout<<"\n";
+    //inorder(head);
     //cout<<"\n"<<head->data;
    return 0;
 }
