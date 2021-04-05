@@ -1,102 +1,117 @@
+#include <iostream>
+#include <bits/stdc++.h> 
+using namespace std;
 
-#include<bits/stdc++.h> 
-using namespace std; 
-# define INF 0x3f3f3f3f 
+//#pragma GCC optimize('O2') 
+#define ll long long 
+#define vll vector<ll>
+#define vi vector<int>
+#define tin tuple<ll,ll,ll>
+#define mll map<ll,ll>
+#define pi pair<ll,ll>
+#define vp vector<pi>
+#define pb push_back
+#define mp make_pair
+#define F first
+#define S second
+#define mt make_tuple
+#define all(x) (x).begin(),(x).end()
+#define rall(x) x.rbegin(), x.rend()
+#define watch(x) cout << (#x) << ' is ' << (x) << endl
+#define f(i,x,z) for(ll i=x;i<z;i++)
+#define rf(i,x,z) for(ll i=x-1;i>=z;i--)
+#define deb(x) cout<<'DEBUG------> '<<x<<endl
+#define srt(v) sort(v.begin(), v.end())
+#define rsrt(v) sort(v.rbegin(), v.rend())
+#define clr(x) memset(x, 0, sizeof(x)) 
+#define fa(i,vect) for(auto i : vect)
+#define fr(i,vect) for(VI :: reverse_iterator i = vect.rbegin(); i != vect.rend(); i++)
+#define mod 1000000007
+//  for (auto &a : v)
+//cin >> a;
+//for (auto me : m) {
+//std::vector<ll>::iterator it; 
+//it = std::find (v.begin(), v.end(), ser);
+//if (it != v.end())
+# define INF 10000000000000000
+////////////////////////////////////////////////////////////////////////////////////////////
 
-typedef pair<int, int> iPair; 
+ll power(ll base,ll por)
+{
+ll res=1;
+while(por>1){
+if(por%2==1)
+{
+res*=base;
+por--;
+}
+por/=2;
+base*=base;
+}
+res*=base;
+return res;
+}
+void dijkstra(vp v[],ll t)
+{
+	priority_queue<pi,vp,greater<pi>> p;//ascending order list(distance will be stored first then vertices)
+	vll dist(t,INF);
+	vll pat(t,-1);
+	p.push(mp(0,0));
+	dist[0]=0;
+	while(!p.empty())
+	{
+		ll vert=p.top().S;
+		p.pop();
+		for(auto x : v[vert])
+		{
+			ll weight=x.S;
+			ll point=x.F;
+			if(dist[x.F]>dist[vert]+weight)
+			{
+				dist[x.F]=dist[vert]+weight;
+				pat[x.F]=vert;
+				p.push(mp(dist[x.F],x.F));
+			}
+		}
+	}
+	vll fin;
+	if(pat[t-1]==-1)
+	{
+		cout<<"-1";
+	}
+	else
+	{
+		fin.pb(t);
+		for(ll i=pat[t-1];i!=-1;i=pat[i])
+		{
+			fin.pb(i+1);
+		}
+		for(ll i=fin.size()-1;i>=0;i--)
+		{
+			cout<<fin[i]<<" ";
+		}
+	}
+	
+	
+}
 
-class Graph 
-{ 
-	int V; 
-	list< pair<int, int> > *adj; 
+/////////////////////////////////////////////////////////////////////////////////////////
+int main()
+{
+//   freopen('a.txt', 'r', stdin); freopen('a_out.txt', 'w', stdout);
 
-public: 
-	Graph(int V); 
-	void addEdge(int u, int v, int w); 
-
-	void shortestPath(int s); 
-}; 
-
-Graph::Graph(int V) 
-{ 
-	this->V = V; 
-	adj = new list<iPair> [V]; 
-} 
-
-void Graph::addEdge(int u, int v, int w) 
-{ 
-	adj[u].push_back(make_pair(v, w)); 
-	adj[v].push_back(make_pair(u, w)); 
-} 
-
-// Prints shortest paths from src to all other vertices 
-void Graph::shortestPath(int src) 
-{ 
-
-	priority_queue< iPair, vector <iPair> , greater<iPair> > pq; 
-
-	vector<int> dist(V, INF); 
-
-	// Insert source itself in priority queue and initialize 
-	// its distance as 0. 
-	pq.push(make_pair(0, src)); 
-	dist[src] = 0; 
-
-
-	while (!pq.empty()) 
-	{ 
-
-		int u = pq.top().second; 
-		pq.pop(); 
-
-		list< pair<int, int> >::iterator i; 
-		for (i = adj[u].begin(); i != adj[u].end(); ++i) 
-		{ 
-			// Get vertex label and weight of current adjacent 
-			// of u. 
-			int v = (*i).first; 
-			int weight = (*i).second; 
-
-			// If there is shorted path to v through u. 
-			if (dist[v] > dist[u] + weight) 
-			{ 
-				// Updating distance of v 
-				dist[v] = dist[u] + weight; 
-				pq.push(make_pair(dist[v], v)); 
-			} 
-		} 
-	} 
-
-	// Print shortest distances stored in dist[] 
-	printf("Vertex Distance from Source\n"); 
-	for (int i = 0; i < V; ++i) 
-		printf("%d \t\t %d\n", i, dist[i]); 
-} 
-
-// Driver program to test methods of graph class 
-int main() 
-{ 
-	// create the graph given in above fugure 
-	int V = 9; 
-	Graph g(V); 
-
-	// making above shown graph 
-	g.addEdge(0, 1, 4); 
-	g.addEdge(0, 7, 8); 
-	g.addEdge(1, 2, 8); 
-	g.addEdge(1, 7, 11); 
-	g.addEdge(2, 3, 7); 
-	g.addEdge(2, 8, 2); 
-	g.addEdge(2, 5, 4); 
-	g.addEdge(3, 4, 9); 
-	g.addEdge(3, 5, 14); 
-	g.addEdge(4, 5, 10); 
-	g.addEdge(5, 6, 2); 
-	g.addEdge(6, 7, 1); 
-	g.addEdge(6, 8, 6); 
-	g.addEdge(7, 8, 7); 
-
-	g.shortestPath(0); 
-
-	return 0; 
-} 
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	ll t,n;
+	cin>>t>>n;
+	ll a,co=0,c=0,d=0,b=0,k;
+	vp v[t];
+	f(i,0,n)
+	{
+		cin>>a>>b>>c;
+		v[a-1].pb(mp(b-1,c));
+		v[b-1].pb(mp(a-1,c));
+	}
+	dijkstra(v,t);
+   return 0;
+}
